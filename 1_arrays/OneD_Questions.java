@@ -48,18 +48,56 @@ public class OneD_Questions {
         System.out.println(newArr);
     }
 
-    // public static void removeDuplicate(int[] arr){
-    //     Sorting.mergeSort(arr, 0, arr.length-1);
+    public static boolean containsDuplicate(int[] arr) {
+        Sorting.mergeSort(arr, 0, arr.length - 1);
 
-    //     ArrayList<Integer> ans = new ArrayList<>();
-    //     int j = 1;
-    //     for(int i = 0; i < arr.length-1; i++){
-    //         if(arr[i] != arr[j] && arr[i] != arr[i-1]){
-    //             ans.add(arr[j]);
-    //         }
-    //         j++;
-    //     }
-    //     System.out.println(ans);
+        for (int i = 0; i < arr.length - 1; i++) {
+            if (arr[i] == arr[i + 1]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void removeDuplicate(int[] arr) {
+        Sorting.mergeSort(arr, 0, arr.length - 1);
+
+        int j = 0; // points to position of last unique element
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] != arr[j]) {
+                j++;
+                arr[j] = arr[i];
+            }
+        }
+
+        for (int i = 0; i <= j; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+    }
+
+    public static void removeDuplicateElements(int[] arr) {
+        Sorting.mergeSort(arr, 0, arr.length - 1);
+
+        ArrayList<Integer> result = new ArrayList<>();
+
+        int i = 0;
+        while (i < arr.length) {
+            int count = 1;
+            while (i + 1 < arr.length && arr[i] == arr[i + 1]) {
+                count++;
+                i++;
+            }
+            if (count == 1) {
+                result.add(arr[i]);
+            }
+            i++;
+        }
+
+        for (int num : result) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
     }
 
     public static void reverseArr(int[] arr) {
@@ -114,8 +152,8 @@ public class OneD_Questions {
             k = ((k % size) + size) % size;
         }
 
-        reversePos(arr, 0, size-1);
-        reversePos(arr, 0, (size - k) -1);
+        reversePos(arr, 0, size - 1);
+        reversePos(arr, 0, (size - k) - 1);
         reversePos(arr, size - k, size - 1);
 
         printArr(arr);
@@ -151,6 +189,90 @@ public class OneD_Questions {
         printArr(arr);
     }
 
+    public static void mergeArrays(int[] arr1, int[] arr2) {
+        int i = 0, j = 0, k = 0;
+        int[] arr = new int[(arr1.length + arr2.length)];
+        while (i < arr1.length && j < arr2.length) {
+            if (arr1[i] <= arr2[j]) {
+                arr[k] = arr1[i];
+                i++;
+            } else {
+                arr[k] = arr2[j];
+                j++;
+            }
+            k++;
+        }
+        // left over array---------------
+        // for arr1
+        while (i < arr1.length) {
+            arr[k] = arr1[i];
+            k++;
+            i++;
+        }
+        // for arr2
+        while (j < arr2.length) {
+            arr[k] = arr2[j];
+            k++;
+            j++;
+        }
+        printArr(arr);
+    }
+
+    public static void printSubarrays(int[] arr) {
+        int size = arr.length;
+
+        for (int si = 0; si < size; si++) {
+            for (int ei = si; ei < size; ei++) {
+                System.out.print("[");
+                for (int k = si; k <= ei; k++) {
+                    System.out.print(arr[k]);
+                    if (k != ei) {
+                        System.out.print(", ");
+                    }
+                }
+                System.out.println("]");
+            }
+        }
+    }
+
+    public static void maxSumSubarray(int[] arr) {
+        int size = arr.length;
+        int currSum, maxSum = Integer.MIN_VALUE;
+
+        for (int si = 0; si < size; si++) {
+            currSum = 0;
+            for (int ei = si; ei < size; ei++) {
+                currSum += arr[ei];
+                maxSum = Math.max(currSum, maxSum);
+            }
+        }
+        System.out.println(maxSum);
+    }
+
+    public static void kadanAlgo(int[] arr) {
+        int currSum = 0, maxSum = Integer.MIN_VALUE;
+        int ansStart = -1, ansEnd = -1, start = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (currSum == 0) {
+                start = i;
+            }
+            currSum += arr[i];
+
+            if (currSum > maxSum) {
+                maxSum = currSum;
+                ansStart = start;
+                ansEnd = i;
+            }
+            if (currSum < 0) {
+                currSum = 0;
+            }
+        }
+        System.out.println(maxSum);
+        for (int i = ansStart; i <= ansEnd; i++) {
+            System.out.println(arr[i]);
+        }
+    }
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         // inputs----------------------
@@ -171,8 +293,14 @@ public class OneD_Questions {
         // leetcode 287 -------------------------
         // findDuplicate(arr);
 
-        //remove duplicate--------------------
+        // contains duplicate -----------------
+        // containsDuplicate(arr3);
+
+        // remove duplicate--------------------
         // removeDuplicate(arr6);
+
+        // remove duplicate element from the array ----------------
+        // removeDuplicateElements(arr6);
 
         // reverse array ---------------
         // reverseArr(arr);
@@ -186,11 +314,21 @@ public class OneD_Questions {
         // merge 2 sorted arrays ------------------
         // mergeArrays(int[] arr5, int[] arr6);
 
-        // find the difference of the sum of even and odd no. in array
-        // ---------------------
+        // find the difference of the sum of even and odd no. in array ---------------------
         // cal(arr);
 
         // move zeros to end -----------------
         // zeros(arr4);
-    }
+
+        //merge 2 sorted arrays-----------------
+        // mergeArrays(arr5, arr6);
+
+        // print subarrays ------------------
+        // printSubarrays(arr3);
+
+        // max sum Subarray--------------
+        // maxSumSubarray(arr3);
+        
+        // kadan's algorithm -----------------
+        // kadanAlgo(arr3);
 }
